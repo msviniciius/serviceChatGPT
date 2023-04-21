@@ -25,7 +25,22 @@ type Chat struct {
 }
 
 func NewChat(userID string, initialSystemMessage *Message, ChatConfig *ChatConfig) (*Chat, error) {
+	chat := &Chat{
+		ID:                   userID,
+		UserID:               userID,
+		InitialSystemMessage: initialSystemMessage,
+		Status:               "active",
+		Config:               ChatConfig,
+		TokenUsage:           0,
+	}
 
+	chat.AddMessage(initialSystemMessage)
+
+	if err := chat.Validate(); err != nil {
+		return nil, err
+	}
+
+	return chat, nil
 }
 
 func (c *Chat) Validate() error {
